@@ -27,11 +27,15 @@ Creating a `MMDrawerController` is as easy as creating a center view controller 
 UIViewController * leftDrawer = [[UIViewController alloc] init];
 UIViewController * center = [[UIViewController alloc] init];
 UIViewController * rightDrawer = [[UIViewController alloc] init];
+UIViewController * topDrawer = [[UIViewController alloc] init];
+UIViewController * bottomDrawer = [[UIViewController alloc] init];
 
 MMDrawerController * drawerController = [[MMDrawerController alloc]
                                   	   initWithCenterViewController:center
 										   leftDrawerViewController:leftDrawer
-										   rightDrawerViewController:rightDrawer];
+										   rightDrawerViewController:rightDrawer
+										   topDrawerViewController:topDrawer
+										   bottomDrawerViewController:bottomDrawer];
 ```
 
 ---
