@@ -42,6 +42,14 @@
             sideDrawerViewController = drawerController.rightDrawerViewController;
             translateTransform = CATransform3DMakeTranslation(-(maxDistance-distance), 0.0, 0.0);
         }
+        else if(drawerSide == MMDrawerSideTop){
+            sideDrawerViewController = drawerController.topDrawerViewController;
+            translateTransform = CATransform3DMakeTranslation((maxDistance-distance), 0.0, 0.0);
+        }
+        else if(drawerSide == MMDrawerSideBottom){
+            sideDrawerViewController = drawerController.bottomDrawerViewController;
+            translateTransform = CATransform3DMakeTranslation(-(maxDistance-distance), 0.0, 0.0);
+        }
         
         [sideDrawerViewController.view.layer setTransform:CATransform3DConcat(scaleTransform, translateTransform)];
         [sideDrawerViewController.view setAlpha:percentVisible];
@@ -60,7 +68,8 @@
         UIViewController * sideDrawerViewController;
         CGPoint anchorPoint;
         CGFloat maxDrawerWidth = 0.0;
-        CGFloat xOffset;
+        CGFloat maxDrawerHeight = 0.0;
+        CGFloat offset = 0.0;
         CGFloat angle = 0.0;
         
         if(drawerSide==MMDrawerSideLeft){
@@ -68,14 +77,28 @@
             sideDrawerViewController = drawerController.leftDrawerViewController;
             anchorPoint =  CGPointMake(1.0, .5);
             maxDrawerWidth = MAX(drawerController.maximumLeftDrawerWidth,drawerController.visibleLeftDrawerWidth);
-            xOffset = -(maxDrawerWidth/2.0) + (maxDrawerWidth)*percentVisible;
+            offset = -(maxDrawerWidth/2.0) + (maxDrawerWidth)*percentVisible;
             angle = -M_PI_2+(percentVisible*M_PI_2);
         }
-        else {
+        else if (drawerSide==MMDrawerSideRight){
             sideDrawerViewController = drawerController.rightDrawerViewController;
             anchorPoint = CGPointMake(0.0, .5);
             maxDrawerWidth = MAX(drawerController.maximumRightDrawerWidth,drawerController.visibleRightDrawerWidth);
-            xOffset = (maxDrawerWidth/2.0) - (maxDrawerWidth)*percentVisible;
+            offset = (maxDrawerWidth/2.0) - (maxDrawerWidth)*percentVisible;
+            angle = M_PI_2-(percentVisible*M_PI_2);
+        }
+        else if (drawerSide==MMDrawerSideTop){
+            sideDrawerViewController = drawerController.topDrawerViewController;
+            anchorPoint = CGPointMake(.5, 0.0);
+            maxDrawerHeight = MAX(drawerController.maximumTopDrawerHeight,drawerController.visibleTopDrawerHeight);
+            offset = -(maxDrawerHeight/2.0) - (maxDrawerHeight)*percentVisible;
+            angle = -M_PI_2-(percentVisible*M_PI_2);
+        }
+        else if (drawerSide==MMDrawerSideBottom){
+            sideDrawerViewController = drawerController.bottomDrawerViewController;
+            anchorPoint = CGPointMake(.5, 0.0);
+            maxDrawerHeight = MAX(drawerController.maximumBottomDrawerHeight,drawerController.visibleBottomDrawerHeight);
+            offset = (maxDrawerHeight/2.0) - (maxDrawerHeight)*percentVisible;
             angle = M_PI_2-(percentVisible*M_PI_2);
         }
         
@@ -90,7 +113,7 @@
             identity.m34 = -1.0/1000.0;
             CATransform3D rotateTransform = CATransform3DRotate(identity, angle, 0.0, 1.0, 0.0);
             
-            CATransform3D translateTransform = CATransform3DMakeTranslation(xOffset, 0.0, 0.0);
+            CATransform3D translateTransform = CATransform3DMakeTranslation(offset, 0.0, 0.0);
             
             CATransform3D concatTransform = CATransform3DConcat(rotateTransform, translateTransform);
             
@@ -101,6 +124,9 @@
             
             NSInteger scalingModifier = 1.f;
             if (drawerSide == MMDrawerSideRight) {
+                scalingModifier = -1.f;
+            }
+            if (drawerSide == MMDrawerSideBottom) {
                 scalingModifier = -1.f;
             }
             
@@ -139,6 +165,28 @@
             else{
                 transform = CATransform3DMakeScale(percentVisible, 1.f, 1.f);
                 transform = CATransform3DTranslate(transform, -drawerController.maximumRightDrawerWidth*(percentVisible-1.f)/2, 0.f, 0.f);
+            }
+        }
+        else if(drawerSide == MMDrawerSideTop){
+            sideDrawerViewController = drawerController.topDrawerViewController;
+            CGFloat distance = MAX(drawerController.maximumTopDrawerHeight,drawerController.visibleTopDrawerHeight);
+            if(percentVisible <= 1.f){
+                transform = CATransform3DMakeTranslation((-distance)/parallaxFactor-(distance*percentVisible)/parallaxFactor, 0.0, 0.0);
+            }
+            else{
+                transform = CATransform3DMakeScale(percentVisible, 1.f, 1.f);
+                transform = CATransform3DTranslate(transform, drawerController.maximumTopDrawerHeight*(percentVisible-1.f)/2, 0.f, 0.f);
+            }
+        }
+        else if(drawerSide == MMDrawerSideBottom){
+            sideDrawerViewController = drawerController.bottomDrawerViewController;
+            CGFloat distance = MAX(drawerController.maximumBottomDrawerHeight,drawerController.visibleTopDrawerHeight);
+            if(percentVisible <= 1.f){
+                transform = CATransform3DMakeTranslation((distance)/parallaxFactor-(distance*percentVisible)/parallaxFactor, 0.0, 0.0);
+            }
+            else{
+                transform = CATransform3DMakeScale(percentVisible, 1.f, 1.f);
+                transform = CATransform3DTranslate(transform, -drawerController.maximumBottomDrawerHeight*(percentVisible-1.f)/2, 0.f, 0.f);
             }
         }
         

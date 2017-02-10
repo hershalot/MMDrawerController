@@ -35,6 +35,7 @@
     return nil;
 }
 
+
 -(CGRect)mm_visibleDrawerFrame{
     if([self isEqual:self.mm_drawerController.leftDrawerViewController] ||
        [self.navigationController isEqual:self.mm_drawerController.leftDrawerViewController]){
@@ -56,9 +57,33 @@
         }
         return rect;
     }
+    else if([self isEqual:self.mm_drawerController.topDrawerViewController] ||
+            [self.navigationController isEqual:self.mm_drawerController.topDrawerViewController]){
+        CGRect rect = self.mm_drawerController.view.bounds;
+        rect.size.height = self.mm_drawerController.maximumTopDrawerHeight;
+//        rect.origin.y = CGRectGetHeight(self.mm_drawerController.view.bounds)-rect.size.height;
+        if (self.mm_drawerController.showsStatusBarBackgroundView) {
+            rect.size.width -= 20.0f;
+        }
+        return rect;
+    }
+    else if([self isEqual:self.mm_drawerController.bottomDrawerViewController] ||
+            [self.navigationController isEqual:self.mm_drawerController.bottomDrawerViewController]){
+        CGRect rect = self.mm_drawerController.view.bounds;
+        rect.size.height = self.mm_drawerController.maximumBottomDrawerHeight;
+        rect.origin.y = CGRectGetHeight(self.mm_drawerController.view.bounds)-rect.size.height;
+        if (self.mm_drawerController.showsStatusBarBackgroundView) {
+            rect.size.width -= 20.0f;
+        }
+        return rect;
+    }
     else {
         return CGRectNull;
     }
+    
+    
+    
+    
 }
 
 @end

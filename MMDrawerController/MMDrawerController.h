@@ -54,6 +54,8 @@ typedef NS_ENUM(NSInteger,MMDrawerSide){
     MMDrawerSideNone = 0,
     MMDrawerSideLeft,
     MMDrawerSideRight,
+    MMDrawerSideTop,
+    MMDrawerSideBottom,
 };
 
 typedef NS_OPTIONS(NSInteger, MMOpenDrawerGestureMode) {
@@ -121,6 +123,19 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  The size of this view controller is managed within this class, and is automatically set to the appropriate size based on the `maximumRightDrawerWidth`. Do not modify the frame externally.
  */
 @property (nonatomic, strong) UIViewController * rightDrawerViewController;
+/**
+ The top drawer view controller.
+ 
+ The size of this view controller is managed within this class, and is automatically set to the appropriate size based on the `maximumLeftDrawerWidth`. Do not modify the frame externally.
+ */
+@property (nonatomic, strong) UIViewController * topDrawerViewController;
+
+/**
+ The boton drawer view controller.
+ 
+ The size of this view controller is managed within this class, and is automatically set to the appropriate size based on the `maximumLeftDrawerWidth`. Do not modify the frame externally.
+ */
+@property (nonatomic, strong) UIViewController * bottomDrawerViewController;
 
 /**
  The maximum width of the `leftDrawerViewController`. 
@@ -138,6 +153,21 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
 @property (nonatomic, assign) CGFloat maximumRightDrawerWidth;
 
 /**
+ The maximum width of the `topDrawerViewController`.
+ 
+ By default, this is set to 480. If the `leftDrawerViewController` is nil, this property will return 0.0;
+ */
+@property (nonatomic, assign) CGFloat maximumTopDrawerHeight;
+
+/**
+ The maximum width of the `bottomDrawerViewController`.
+ 
+ By default, this is set to 480. If the `rightDrawerViewController` is nil, this property will return 0.0;
+ 
+ */
+@property (nonatomic, assign) CGFloat maximumBottomDrawerHeight;
+
+/**
  The visible width of the `leftDrawerViewController`. 
  
  Note this value can be greater than `maximumLeftDrawerWidth` during the full close animation when setting a new center view controller;
@@ -150,6 +180,20 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  Note this value can be greater than `maximumRightDrawerWidth` during the full close animation when setting a new center view controller;
  */
 @property (nonatomic, assign, readonly) CGFloat visibleRightDrawerWidth;
+
+/**
+ The visible width of the `topDrawerViewControlelr`.
+ 
+ Note this value can be greater than `maximumTopDrawerHeight` during the full close animation when setting a new center view controller;
+ */
+@property (nonatomic, assign, readonly) CGFloat visibleTopDrawerHeight;
+
+/**
+ The visible height of the `bottomDrawerViewController`.
+ 
+ Note this value can be greater than `maximumBottomDrawerHeight` during the full close animation when setting a new center view controller;
+ */
+@property (nonatomic, assign, readonly) CGFloat visibleBottomDrawerHeight;
 
 /**
  The animation velocity of the open and close methods, measured in points per second.
@@ -256,9 +300,31 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  */
 @property (nonatomic, assign) CGFloat panVelocityXAnimationThreshold;
 
+/**
+ The value determining if the user can open or close drawer with panGesture velocity.
+ 
+ By default, this is set 300.0f.
+ */
+@property (nonatomic, assign) CGFloat panVelocityYAnimationThreshold;
+
 ///---------------------------------------
 /// @name Initializing a `MMDrawerController`
 ///---------------------------------------
+
+
+/**
+ Creates and initializes an `MMDrawerController` object with the specified center view controller, right drawer view, left drawer view controller, top view controller.
+ 
+ @param centerViewController The center view controller. This argument must not be `nil`.
+ @param leftDrawerViewController The left drawer controller.
+ @param rightDrawerViewController The right drawer controller.
+ @param topDrawerViewController the top drawer controller
+ @param bottomDrawerViewController the bottom drawer controller
+ 
+ @return The newly-initialized drawer container view controller.
+ */
+-(instancetype)initWithCenterViewController:(UIViewController *)centerViewController leftDrawerViewController:(UIViewController *)leftDrawerViewController rightDrawerViewController:(UIViewController*)rightDrawerViewController topDrawerViewController:(UIViewController*)topDrawerViewController bottomDrawerViewController:(UIViewController*)bottomDrawerViewController;
+
 
 /**
  Creates and initializes an `MMDrawerController` object with the specified center view controller, left drawer view controller, and right drawer view controller. 
@@ -290,6 +356,142 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  @return The newly-initialized drawer container view controller.
  */
 -(instancetype)initWithCenterViewController:(UIViewController *)centerViewController rightDrawerViewController:(UIViewController *)rightDrawerViewController;
+
+/**
+ Creates and initializes an `MMDrawerController` object with the specified center view controller, top drawer view controller.
+ 
+ @param centerViewController The center view controller. This argument must not be `nil`.
+ @param topDrawerViewController The right drawer controller.
+ 
+ @return The newly-initialized drawer container view controller.
+ */
+-(instancetype)initWithCenterViewController:(UIViewController *)centerViewController topDrawerViewController:(UIViewController *)topDrawerViewController;
+
+/**
+ Creates and initializes an `MMDrawerController` object with the specified center view controller, botom drawer view controller.
+ 
+ @param centerViewController The center view controller. This argument must not be `nil`.
+ @param bottomDrawerViewController The right drawer controller.
+ 
+ @return The newly-initialized drawer container view controller.
+ */
+
+-(instancetype)initWithCenterViewController:(UIViewController *)centerViewController bottomDrawerViewController:(UIViewController *)bottomDrawerViewController;
+
+
+/**
+ Creates and initializes an `MMDrawerController` object with the specified center view controller, right drawer view controller, bottom view controller.
+ 
+ @param centerViewController The center view controller. This argument must not be `nil`.
+ @param rightDrawerViewController The right drawer controller.
+ @param bottomDrawerViewController the top drawer controller
+ 
+ @return The newly-initialized drawer container view controller.
+ */
+
+-(instancetype)initWithCenterViewController:(UIViewController *)centerViewController rightDrawerViewController:(UIViewController *)rightDrawerViewController bottomDrawerViewController:(UIViewController*)bottomDrawerViewController;
+
+/**
+ Creates and initializes an `MMDrawerController` object with the specified center view controller, right drawer view controller, top view controller.
+ 
+ @param centerViewController The center view controller. This argument must not be `nil`.
+ @param rightDrawerViewController The right drawer controller.
+ @param topDrawerViewController the top drawer controller
+ 
+ @return The newly-initialized drawer container view controller.
+ */
+
+-(instancetype)initWithCenterViewController:(UIViewController *)centerViewController rightDrawerViewController:(UIViewController *)rightDrawerViewController topDrawerViewController:(UIViewController*)topDrawerViewController;
+
+/**
+ Creates and initializes an `MMDrawerController` object with the specified center view controller, left drawer view controller, bottom view controller.
+ 
+ @param centerViewController The center view controller. This argument must not be `nil`.
+ @param leftDrawerViewController The left drawer controller.
+ @param bottomDrawerViewController the bottom drawer controller
+ 
+ @return The newly-initialized drawer container view controller.
+ */
+
+-(instancetype)initWithCenterViewController:(UIViewController *)centerViewController leftDrawerViewController:(UIViewController *)leftDrawerViewController bottomDrawerViewController:(UIViewController*)bottomDrawerViewController;
+
+
+/**
+ Creates and initializes an `MMDrawerController` object with the specified center view controller, left drawer view controller, top view controller.
+ 
+ @param centerViewController The center view controller. This argument must not be `nil`.
+ @param leftDrawerViewController The left drawer controller.
+ @param topDrawerViewController the top drawer controller
+ 
+ @return The newly-initialized drawer container view controller.
+ */
+
+-(instancetype)initWithCenterViewController:(UIViewController *)centerViewController leftDrawerViewController:(UIViewController *)leftDrawerViewController topDrawerViewController:(UIViewController*)topDrawerViewController;
+
+
+/**
+ Creates and initializes an `MMDrawerController` object with the specified center view controller, top drawer view controller, bottom view controller.
+ 
+ @param centerViewController The center view controller. This argument must not be `nil`.
+ @param topDrawerViewController The top drawer controller.
+ @param bottomDrawerViewController the bottom drawer controller
+ 
+ @return The newly-initialized drawer container view controller.
+ */
+
+-(instancetype)initWithCenterViewController:(UIViewController *)centerViewController topDrawerViewController:(UIViewController *)topDrawerViewController bottomDrawerViewController:(UIViewController*)bottomDrawerViewController;
+
+/**
+ Creates and initializes an `MMDrawerController` object with the specified center view controller, right drawer view controller, left view controller, bottom view controller.
+ 
+ @param centerViewController The center view controller. This argument must not be `nil`.
+ @param rightDrawerViewController The right drawer controller.
+ @param leftDrawerViewController the left drawer controller
+ @param bottomDrawerViewController the bottom drawer controller
+ 
+ @return The newly-initialized drawer container view controller.
+ */
+-(instancetype)initWithCenterViewController:(UIViewController *)centerViewController leftDrawerViewController:(UIViewController*)leftDrawerViewController rightDrawerViewController:(UIViewController *)rightDrawerViewController bottomDrawerViewController:(UIViewController*)bottomDrawerViewController;
+
+/**
+ Creates and initializes an `MMDrawerController` object with the specified center view controller, right drawer view controller, left view controller, top view controller.
+ 
+ @param centerViewController The center view controller. This argument must not be `nil`.
+ @param rightDrawerViewController The right drawer controller.
+ @param leftDrawerViewController the left drawer controller
+ @param topDrawerViewController the top drawer controller
+ 
+ @return The newly-initialized drawer container view controller.
+ */
+-(instancetype)initWithCenterViewController:(UIViewController *)centerViewController  leftDrawerViewController:(UIViewController*)leftDrawerViewController rightDrawerViewController:(UIViewController *)rightDrawerViewController topDrawerViewController:(UIViewController*)topDrawerViewController;
+
+/**
+ Creates and initializes an `MMDrawerController` object with the specified center view controller, right drawer view controller, top view controller.
+ 
+ @param centerViewController The center view controller. This argument must not be `nil`.
+ @param rightDrawerViewController The right drawer controller.
+ @param topDrawerViewController the top drawer controller
+ @param bottomDrawerViewController the top drawer controller
+ 
+ @return The newly-initialized drawer container view controller.
+ */
+-(instancetype)initWithCenterViewController:(UIViewController *)centerViewController rightDrawerViewController:(UIViewController *)rightDrawerViewController topDrawerViewController:(UIViewController*)topDrawerViewController bottomDrawerViewController:(UIViewController*)bottomDrawerViewController;
+
+
+/**
+ Creates and initializes an `MMDrawerController` object with the specified center view controller, left drawer view controller, top view controller.
+ 
+ @param centerViewController The center view controller. This argument must not be `nil`.
+ @param leftDrawerViewController The left drawer controller.
+ @param topDrawerViewController the top drawer controller
+ @param bottomDrawerViewController the top drawer controller
+ 
+ @return The newly-initialized drawer container view controller.
+ */
+-(instancetype)initWithCenterViewController:(UIViewController *)centerViewController leftDrawerViewController:(UIViewController *)leftDrawerViewController topDrawerViewController:(UIViewController*)topDrawerViewController bottomDrawerViewController:(UIViewController*)bottomDrawerViewController;
+
+
+
 
 ///---------------------------------------
 /// @name Opening and Closing a Drawer
@@ -382,6 +584,30 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  */
 -(void)setMaximumRightDrawerWidth:(CGFloat)width animated:(BOOL)animated completion:(void(^)(BOOL finished))completion;
 
+/**
+ Sets the maximum height of the Top drawer view controller.
+ 
+ If the drawer is open, and `animated` is YES, it will animate the drawer frame as well as adjust the center view controller. If the drawer is not open, this change will take place immediately.
+ 
+ @param height The new width of left drawer view controller. This must be greater than zero.
+ @param animated Determines whether the drawer should be adjusted with an animation.
+ @param completion The block called when the animation is finished.
+ 
+ */
+-(void)setMaximumTopDrawerHeight:(CGFloat)height animated:(BOOL)animated completion:(void(^)(BOOL finished))completion;
+
+/**
+ Sets the maximum height of the right drawer view controller.
+ 
+ If the drawer is open, and `animated` is YES, it will animate the drawer frame as well as adjust the center view controller. If the drawer is not open, this change will take place immediately.
+ 
+ @param height The new width of right drawer view controller. This must be greater than zero.
+ @param animated Determines whether the drawer should be adjusted with an animation.
+ @param completion The block called when the animation is finished.
+ 
+ */
+-(void)setMaximumBottomDrawerHeight:(CGFloat)height animated:(BOOL)animated completion:(void(^)(BOOL finished))completion;
+
 ///---------------------------------------
 /// @name Previewing a Drawer
 ///---------------------------------------
@@ -403,8 +629,9 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  @param completion The block called when the animation is finsihed.
  
  */
--(void)bouncePreviewForDrawerSide:(MMDrawerSide)drawerSide distance:(CGFloat)distance completion:(void(^)(BOOL finished))completion;
+-(void)bouncePreviewForXDrawerSide:(MMDrawerSide)drawerSide distance:(CGFloat)distance completion:(void(^)(BOOL finished))completion;
 
+-(void)bouncePreviewForYDrawerSide:(MMDrawerSide)drawerSide distance:(CGFloat)distance completion:(void(^)(BOOL finished))completion;
 ///---------------------------------------
 /// @name Custom Drawer Animations
 ///---------------------------------------
