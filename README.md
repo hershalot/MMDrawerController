@@ -179,8 +179,8 @@ The example shows off all the features of the library. Give it a whirl.
 ##What this Library Doesn't Do
 In order to keep this library light-weight, we had to make some design trade off decisions. Specifically, we decided this library would NOT DO the following:
 
-* Top or bottom drawer views
-* Displaying both drawers at one time
+
+* Displaying All drawers at one time
 * Displaying a minimum drawer width
 * Support container view controllers other than `UINavigationController` (such as `UITabBarController` or `UISplitViewController`) as the center view controller. 
 * Support presenting the drawer above the center view controller (like the Google+ app).
